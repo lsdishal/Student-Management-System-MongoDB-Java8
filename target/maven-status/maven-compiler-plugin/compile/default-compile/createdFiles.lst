@@ -1,8 +1,0 @@
-com/student/exception/InvalidFieldException.class
-com/student/model/Student.class
-com/student/MongoDB_Java8.class
-com/student/db/MongoUtil.class
-com/student/exception/DuplicateStudentException.class
-com/student/service/StudentService.class
-com/student/exception/InvalidCGPAException.class
-com/student/exception/StudentNotFoundException.class
