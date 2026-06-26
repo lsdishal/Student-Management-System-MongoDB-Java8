@@ -14,6 +14,7 @@ public class Student {
     private String gender;
     private int semester;
     private String admissionDate;
+    private Audit audit;
 
     public Student() {
     }
@@ -37,8 +38,9 @@ public class Student {
         this.gender = gender;
         this.semester = semester;
         this.admissionDate = admissionDate;
+        this.audit=new Audit();
     }
-
+    
     // Generate Getters and Setters
     public int getStudentId() {
         return studentId;
@@ -134,5 +136,11 @@ public class Student {
 
     public void setAdmissionDate(String admissionDate) {
         this.admissionDate = admissionDate;
+    }
+    public Audit getAudit() {
+        return audit;
+    }
+    public void setAudit(Audit audit) {
+        this.audit = audit;
     }
 }

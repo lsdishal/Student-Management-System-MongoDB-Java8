@@ -55,7 +55,6 @@ public class MongoDB_Java8 {
 
             }
         }
-
     }
 
     public static void addStudents(StudentService service) {
@@ -192,7 +191,6 @@ public class MongoDB_Java8 {
                         Object value_del = readValue(in, field_del);
                         service.deleteStudent(field_del, value_del);
                         break;
-
                     case 5:
                         in.nextLine();
                         System.out.println("Enter the field to search : ");

@@ -51,6 +51,7 @@ public class StudentService {
             ));
     MongoDatabase db = MongoUtil.getDatabase();
     MongoCollection<Document> collection = db.getCollection("students");
+
     public StudentService() {
         collection.createIndex(
                 Indexes.ascending("studentId"),
@@ -107,12 +108,13 @@ public class StudentService {
         doc.append("gender", s.getGender());
         doc.append("semester", s.getSemester());
         doc.append("admissionDate", s.getAdmissionDate());
-
+        doc.append("audit", new Document()
+                        .append("createdDate", s.getAudit().getCreatedDate().toString())
+                        .append("modifiedDate", s.getAudit().getModifiedDate().toString()));       
+        
         collection.insertOne(doc);
-
         System.out.println("Student Inserted");
     }
-
     public void findStudentById(int id) throws StudentNotFoundException {
         Document doc = collection.find(Filters.eq("studentId", id)).first();
 
@@ -132,7 +134,10 @@ public class StudentService {
         if (doc == null) {
             throw new StudentNotFoundException("No student found with ID: " + id);
         }
-        collection.updateOne(Filters.eq("studentId", id), Updates.set(field, value));
+        collection.updateOne(Filters.eq("studentId", id), Updates.combine(
+                                            Updates.set(field, value),
+                                            Updates.set("audit.modifiedDate", java.time.LocalDateTime.now().toString())
+                                        ));
         System.out.println("Updated Successfully");
 
     }
@@ -350,6 +355,9 @@ public class StudentService {
             System.out.printf("| %-14s | %-23s |%n", row[0], row[1]);
         }
         System.out.println(line);
+        Document audit = (Document) doc.get("audit");
+        System.out.printf("| %-14s | %-23s |%n", "Created Date", audit.getString("createdDate"));
+        System.out.printf("| %-14s | %-23s |%n", "Modified Date", audit.getString("modifiedDate"));  
     }
 
     public void exportToCSV() throws IOException{
