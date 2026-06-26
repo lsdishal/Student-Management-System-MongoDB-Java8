@@ -12,17 +12,8 @@ public class Audit {
         this.modifiedDate = LocalDateTime.now();
     }
 
-    public Audit(LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-    }
-
     public LocalDateTime getCreatedDate() {
         return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
     }
 
     public LocalDateTime getModifiedDate() {
@@ -32,12 +23,4 @@ public class Audit {
     public void setModifiedDate(LocalDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
-
-    @Override
-    public String toString() {
-        return "Audit{" +
-                "createdDate=" + createdDate +
-                ", modifiedDate=" + modifiedDate +
-                '}';
-    }
-}
+}   

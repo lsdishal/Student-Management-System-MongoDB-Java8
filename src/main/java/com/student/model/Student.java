@@ -1,6 +1,6 @@
 package com.student.model;
 
-public class Student {
+public class Student extends Audit {
 
     private int studentId;
     private String studentName;
@@ -15,16 +15,17 @@ public class Student {
     private int semester;
     private String admissionDate;
     private Audit audit;
-
+    
     public Student() {
+
     }
 
     public Student(int studentId, String studentName,
-                   String department, int year,
-                   String course, double marks,
-                   double cgpa, double attendance,
-                   String city, String gender,
-                   int semester, String admissionDate) {
+            String department, int year,
+            String course, double marks,
+            double cgpa, double attendance,
+            String city, String gender,
+            int semester, String admissionDate) {
 
         this.studentId = studentId;
         this.studentName = studentName;
@@ -38,9 +39,9 @@ public class Student {
         this.gender = gender;
         this.semester = semester;
         this.admissionDate = admissionDate;
-        this.audit=new Audit();
+        this.audit = new Audit();
     }
-    
+
     // Generate Getters and Setters
     public int getStudentId() {
         return studentId;
@@ -137,9 +138,11 @@ public class Student {
     public void setAdmissionDate(String admissionDate) {
         this.admissionDate = admissionDate;
     }
+
     public Audit getAudit() {
         return audit;
     }
+
     public void setAudit(Audit audit) {
         this.audit = audit;
     }

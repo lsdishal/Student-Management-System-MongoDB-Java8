@@ -34,6 +34,7 @@ import com.student.exception.StudentNotFoundException;
 import com.student.model.Student;
 
 public class StudentService {
+
     private static final Set<String> validFields
             = new HashSet<>(Arrays.asList(
                     "studentId",
@@ -74,19 +75,19 @@ public class StudentService {
                 Indexes.ascending("semester")
         ));
     }
-    
+
     public void isPresent(String field) throws InvalidFieldException {
         if (!validFields.contains(field)) {
             throw new InvalidFieldException("Invalid Field : " + field);
         }
     }
-    
+
     public void validateCgpa(double cgpa) throws InvalidCGPAException {
         if (cgpa < 0 || cgpa > 10) {
             throw new InvalidCGPAException("CGPA must be between 0 and 10");
         }
     }
-    
+
     public void insertStudent(Student s) throws DuplicateStudentException, InvalidCGPAException {
         Document existing = collection.find(Filters.eq("studentId", s.getStudentId())).first();
 
@@ -108,13 +109,13 @@ public class StudentService {
         doc.append("gender", s.getGender());
         doc.append("semester", s.getSemester());
         doc.append("admissionDate", s.getAdmissionDate());
-        doc.append("audit", new Document()
-                        .append("createdDate", s.getAudit().getCreatedDate().toString())
-                        .append("modifiedDate", s.getAudit().getModifiedDate().toString()));       
-        
+        doc.append("createdDate", s.getCreatedDate().toString());
+        doc.append("modifiedDate", s.getModifiedDate().toString());
+
         collection.insertOne(doc);
         System.out.println("Student Inserted");
     }
+
     public void findStudentById(int id) throws StudentNotFoundException {
         Document doc = collection.find(Filters.eq("studentId", id)).first();
 
@@ -135,9 +136,8 @@ public class StudentService {
             throw new StudentNotFoundException("No student found with ID: " + id);
         }
         collection.updateOne(Filters.eq("studentId", id), Updates.combine(
-                                            Updates.set(field, value),
-                                            Updates.set("audit.modifiedDate", java.time.LocalDateTime.now().toString())
-                                        ));
+                Updates.set(field, value),
+                Updates.set("modifiedDate", java.time.LocalDateTime.now().toString())));
         System.out.println("Updated Successfully");
 
     }
@@ -208,7 +208,7 @@ public class StudentService {
         }
     }
 
-    public void sorting(String field, boolean asc,Scanner in) throws InvalidFieldException {
+    public void sorting(String field, boolean asc, Scanner in) throws InvalidFieldException {
         isPresent(field);
         FindIterable<Document> docs;
         System.out.println("Since there are lots of records, provide page size and number to print limited recrods ");
@@ -233,7 +233,7 @@ public class StudentService {
             System.out.println("No Student Found");
         }
     }
-    
+
     public void countStudentsByDepartment() {
         AggregateIterable<Document> docs = collection.aggregate(Arrays.asList(
                 group("$department", sum("count", 1))
@@ -355,17 +355,16 @@ public class StudentService {
             System.out.printf("| %-14s | %-23s |%n", row[0], row[1]);
         }
         System.out.println(line);
-        Document audit = (Document) doc.get("audit");
-        System.out.printf("| %-14s | %-23s |%n", "Created Date", audit.getString("createdDate"));
-        System.out.printf("| %-14s | %-23s |%n", "Modified Date", audit.getString("modifiedDate"));  
+        System.out.printf("| %-14s | %-23s |%n","Created Date", doc.getString("createdDate"));
+        System.out.printf("| %-14s | %-23s |%n","Modified Date", doc.getString("modifiedDate"));
     }
 
-    public void exportToCSV() throws IOException{
-        BufferedWriter bw=new BufferedWriter(new FileWriter("students.csv"));
+    public void exportToCSV() throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("students.csv"));
         List<Document> docs = collection.find().into(new ArrayList<>());
-        bw.write("studentId,studentName,department,year,course,marks,cgpa,attendance,city,gender,semester,admissionDate");
+        bw.write("studentId,studentName,department,year,course,marks,cgpa,attendance,city,gender,semester,admissionDate,createdDate,modifiedDate");
         bw.newLine();
-        for(Document doc:docs){
+        for (Document doc : docs) {
             bw.write(String.join(",",
                     doc.get("studentId").toString(),
                     doc.getString("studentName"),
@@ -378,7 +377,9 @@ public class StudentService {
                     doc.getString("city"),
                     doc.getString("gender"),
                     doc.get("semester").toString(),
-                    doc.getString("admissionDate")
+                    doc.getString("admissionDate"),
+                    doc.getString("createdDate"),
+                    doc.getString("modifiedDate")
             ));
             bw.newLine();
         }

@@ -18,7 +18,7 @@ import com.student.service.StudentService;
 
 public class MongoDB_Java8 {
 
-    public static void loadRecords(StudentService service,int startId) {
+    public static void loadRecords(StudentService service, int startId) {
         Random random = new Random();
         String[] names = {"Dishal", "Rahul", "Priya", "Ananya", "Kiran", "Arjun", "Sneha"};
         String[] department = {"CSE", "ECE", "IT", "MECH", "CHEMICAL", "CIVIL", "EEE", "FASHION", "BIOTECH"};
@@ -27,7 +27,7 @@ public class MongoDB_Java8 {
         String[] cities = {"Chennai", "Bangalore", "Hyderabad", "Mumbai", "Pune", "Delhi", "Munaar", "Coimbatore"};
         String[] gender = {"Male", "Female"};
 
-        for (int i = startId; i < startId+1000; i++) {
+        for (int i = startId; i < startId + 1000; i++) {
             String name = names[random.nextInt(names.length)];
             String dept = department[random.nextInt(department.length)];
             int year = years[random.nextInt(years.length)];
@@ -245,8 +245,8 @@ public class MongoDB_Java8 {
                         return;
                     case 15:
                         System.out.println("Records starting from which number: ");
-                        int startId=in.nextInt();
-                        loadRecords(service,startId);
+                        int startId = in.nextInt();
+                        loadRecords(service, startId);
                         System.out.println("1000 records loaded successfully");
                         break;
                     default:
